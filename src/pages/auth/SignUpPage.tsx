@@ -4,14 +4,9 @@ import { useSession } from "../../context/SessionContext";
 import supabase from "../../supabase";
 
 const SignUpPage = () => {
-  // ==============================
-  // If user is already logged in, redirect to home
-  // This logic is being repeated in SignIn and SignUp..
   const { session } = useSession();
   if (session) return <Navigate to="/" />;
-  // maybe we can create a wrapper component for these pages
-  // just like the ./router/AuthProtectedRoute.tsx? up to you.
-  // ==============================
+
   const [status, setStatus] = useState("");
   const [formValues, setFormValues] = useState({
     email: "",
@@ -42,32 +37,38 @@ const SignUpPage = () => {
       </Link>
       <form className="main-container" onSubmit={handleSubmit}>
         <h1 className="header-text">Sign Up</h1>
-        <p
-          style={{
-            textAlign: "center",
-            fontSize: "0.8rem",
-            color: "#777",
-          }}
-        >
-          Demo app, please don't use your real email or password
+        <p className="text-muted" style={{ textAlign: "center", marginBottom: "1.5rem", fontSize: "0.875rem" }}>
+          Demo app — please don&apos;t use your real email or password.
         </p>
-        <input
-          name="email"
-          onChange={handleInputChange}
-          type="email"
-          placeholder="Email"
-        />
-        <input
-          name="password"
-          onChange={handleInputChange}
-          type="password"
-          placeholder="Password"
-        />
-        <button type="submit">Create Account</button>
-        <Link className="auth-link" to="/auth/sign-in">
-          Already have an account? Sign In
+
+        <div className="section-block">
+          <label>
+            Email
+            <input
+              name="email"
+              onChange={handleInputChange}
+              type="email"
+              placeholder="you@example.com"
+              value={formValues.email}
+            />
+          </label>
+          <label>
+            Password
+            <input
+              name="password"
+              onChange={handleInputChange}
+              type="password"
+              placeholder="••••••••"
+              value={formValues.password}
+            />
+          </label>
+        </div>
+
+        <button type="submit">Create account</button>
+        <Link className="auth-link" to="/auth/sign-in" style={{ display: "block", marginTop: "1rem" }}>
+          Already have an account? Sign in
         </Link>
-        {status && <p>{status}</p>}
+        {status && <p className="text-muted" style={{ marginTop: "1rem" }}>{status}</p>}
       </form>
     </main>
   );

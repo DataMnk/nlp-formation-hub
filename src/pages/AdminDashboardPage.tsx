@@ -155,40 +155,25 @@ const AdminDashboardPage = () => {
 
   return (
     <main>
-      <Link className="home-link" to="/">
-        ◄ Home
-      </Link>
-      <Link to="/profile" className="auth-link" style={{ marginBottom: 8 }}>
-        Profile
-      </Link>
+      <nav className="page-nav">
+        <Link className="home-link" to="/">◄ Home</Link>
+        <Link to="/profile" className="auth-link">Profile</Link>
+      </nav>
       <section className="main-container">
         <h1 className="header-text">Admin Dashboard</h1>
-        <p>Current User: {session?.user.email ?? "None"}</p>
+        <p className="text-muted">Current user: {session?.user.email ?? "None"}</p>
 
-        <div id="divider"></div>
+        <div id="divider" />
 
-        {/* Create / edit letter */}
-        <div style={{ width: "100%", marginTop: 8 }}>
-          <h2 style={{ fontSize: "1rem", marginBottom: 8 }}>
-            {editingLetter ? "Edit letter" : "New letter"}
-          </h2>
-          <form onSubmit={handleSaveLetter} style={{ width: "100%" }}>
-            <label style={{ display: "block", marginBottom: 8 }}>
+        <div className="section-block">
+          <h2 className="section-title">{editingLetter ? "Edit letter" : "New letter"}</h2>
+          <form onSubmit={handleSaveLetter}>
+            <label>
               Program (required)
               <select
                 required
                 value={formProgramId}
                 onChange={(e) => setFormProgramId(e.target.value)}
-                style={{
-                  width: "100%",
-                  marginTop: 7,
-                  padding: 10,
-                  borderRadius: 4,
-                  background: "#3a3a3a",
-                  border: "1px solid #4a4a4a",
-                  color: "white",
-                  fontSize: "1rem",
-                }}
               >
                 <option value="">— Select program —</option>
                 {programs.map((p) => (
@@ -199,113 +184,68 @@ const AdminDashboardPage = () => {
               </select>
             </label>
             {programsLoading && programs.length === 0 && (
-              <p style={{ opacity: 0.8, marginBottom: 8 }}>Loading programs...</p>
+              <p className="text-muted" style={{ marginBottom: "0.5rem" }}>Loading programs...</p>
             )}
-            <label style={{ display: "block", marginBottom: 8 }}>
+            <label>
               Month number
               <input
                 type="number"
                 min={1}
                 value={formMonth}
                 onChange={(e) => setFormMonth(parseInt(e.target.value, 10) || 1)}
-                style={{ width: "100%", marginTop: 7, marginBottom: 0 }}
               />
             </label>
-            <label style={{ display: "block", marginBottom: 8 }}>
+            <label>
               Title
               <input
                 placeholder="Title"
                 value={formTitle}
                 onChange={(e) => setFormTitle(e.target.value)}
-                style={{ width: "100%", marginTop: 7, marginBottom: 0 }}
               />
             </label>
-            <label style={{ display: "block", marginBottom: 8 }}>
+            <label>
               Markdown content
               <textarea
-              placeholder="Markdown content"
+                placeholder="Markdown content"
                 value={formContent}
                 onChange={(e) => setFormContent(e.target.value)}
                 rows={6}
-                style={{
-                  width: "100%",
-                  marginTop: 7,
-                  marginBottom: 0,
-                  padding: 10,
-                  borderRadius: 4,
-                  background: "#3a3a3a",
-                  border: "1px solid #4a4a4a",
-                  color: "white",
-                  fontFamily: "inherit",
-                }}
               />
             </label>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <div className="dashboard-actions">
               <button type="submit" disabled={saving}>
-                {saving ? "Saving..." : editingLetter ? "Update" : "Create"}
+                {saving ? "Saving…" : editingLetter ? "Update" : "Create"}
               </button>
               {editingLetter && (
-                <button
-                  type="button"
-                  onClick={openNewLetter}
-                  style={{ background: "transparent", color: "#3ecf8e", border: "1px solid #3ecf8e" }}
-                >
+                <button type="button" onClick={openNewLetter} className="btn-ghost">
                   Cancel
                 </button>
               )}
             </div>
           </form>
           {status && (
-            <p style={{ marginTop: 8, color: status.startsWith("Error") ? "#ff6b6b" : "#3ecf8e", fontSize: "0.9rem" }}>
-              {status}
-            </p>
+            <p className={status.startsWith("Error") ? "status-error" : "status-success"}>{status}</p>
           )}
         </div>
 
-        <div id="divider"></div>
+        <div id="divider" />
 
-        {/* List of letters */}
-        <div style={{ width: "100%", marginTop: 8 }}>
-          <h2 style={{ fontSize: "1rem", marginBottom: 8 }}>Letters</h2>
+        <div className="section-block">
+          <h2 className="section-title">Letters</h2>
           {lettersLoading ? (
-            <p style={{ opacity: 0.8 }}>Loading...</p>
+            <p className="text-muted">Loading…</p>
           ) : letters.length === 0 ? (
-            <p style={{ opacity: 0.8 }}>No letters yet.</p>
+            <p className="text-muted">No letters yet.</p>
           ) : (
             <ul style={{ listStyle: "none", padding: 0 }}>
               {letters.map((l) => (
-                <li
-                  key={l.id}
-                  style={{
-                    padding: 10,
-                    border: "1px solid rgba(255,255,255,0.12)",
-                    borderRadius: 8,
-                    marginBottom: 8,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: 8,
-                  }}
-                >
-                  <span>
+                <li key={l.id} className="list-card">
+                  <span className="text-muted" style={{ flex: "1 1 200px" }}>
                     {programs.find((p) => p.id === l.program_id)?.name ?? l.program_id} — {l.title ?? "(untitled)"} — Month {l.month_number ?? "—"}
                   </span>
-                  <div style={{ display: "flex", gap: 8 }}>
-                    <button
-                      type="button"
-                      onClick={() => openEditLetter(l)}
-                      style={{ width: "auto", padding: "6px 12px" }}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteLetter(l.id)}
-                      style={{ width: "auto", padding: "6px 12px", background: "#8b2a2a", borderColor: "#a33" }}
-                    >
-                      Delete
-                    </button>
+                  <div className="list-card-actions">
+                    <button type="button" onClick={() => openEditLetter(l)}>Edit</button>
+                    <button type="button" onClick={() => handleDeleteLetter(l.id)} className="btn-danger">Delete</button>
                   </div>
                 </li>
               ))}
@@ -313,33 +253,32 @@ const AdminDashboardPage = () => {
           )}
         </div>
 
-        <div id="divider"></div>
+        <div id="divider" />
 
-        {/* Members list */}
-        <div style={{ width: "100%", marginTop: 8 }}>
-          <h2 style={{ fontSize: "1rem", marginBottom: 8 }}>Members</h2>
+        <div className="section-block">
+          <h2 className="section-title">Members</h2>
           {membersLoading ? (
-            <p style={{ opacity: 0.8 }}>Loading...</p>
+            <p className="text-muted">Loading…</p>
           ) : members.length === 0 ? (
-            <p style={{ opacity: 0.8 }}>No members yet.</p>
+            <p className="text-muted">No members yet.</p>
           ) : (
             <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.9rem" }}>
+              <table className="data-table">
                 <thead>
-                  <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.2)", textAlign: "left" }}>
-                    <th style={{ padding: "8px 4px" }}>Email</th>
-                    <th style={{ padding: "8px 4px" }}>City</th>
-                    <th style={{ padding: "8px 4px" }}>Long</th>
-                    <th style={{ padding: "8px 4px" }}>Short</th>
+                  <tr>
+                    <th>Email</th>
+                    <th>City</th>
+                    <th>Long</th>
+                    <th>Short</th>
                   </tr>
                 </thead>
                 <tbody>
                   {members.map((m) => (
-                    <tr key={m.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-                      <td style={{ padding: "8px 4px" }}>{m.email ?? m.display_name ?? "—"}</td>
-                      <td style={{ padding: "8px 4px" }}>{m.city ?? "—"}</td>
-                      <td style={{ padding: "8px 4px" }}>{m.long_events_count ?? "—"}</td>
-                      <td style={{ padding: "8px 4px" }}>{m.short_events_count ?? "—"}</td>
+                    <tr key={m.id}>
+                      <td>{m.email ?? m.display_name ?? "—"}</td>
+                      <td>{m.city ?? "—"}</td>
+                      <td>{m.long_events_count ?? "—"}</td>
+                      <td>{m.short_events_count ?? "—"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -348,12 +287,11 @@ const AdminDashboardPage = () => {
           )}
         </div>
 
-        <div id="divider"></div>
+        <div id="divider" />
 
-        {/* Progress placeholder */}
-        <div style={{ width: "100%", marginTop: 8 }}>
-          <h2 style={{ fontSize: "1rem", marginBottom: 8 }}>Progress</h2>
-          <p style={{ opacity: 0.8 }}>Progress overview coming soon.</p>
+        <div className="section-block">
+          <h2 className="section-title">Progress</h2>
+          <p className="text-muted">Progress overview coming soon.</p>
         </div>
       </section>
     </main>

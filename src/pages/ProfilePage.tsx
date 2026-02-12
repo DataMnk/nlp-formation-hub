@@ -100,11 +100,9 @@ const ProfilePage = () => {
   if (isLoading) {
     return (
       <main>
-        <Link className="home-link" to="/">
-          ◄ Home
-        </Link>
+        <Link className="home-link" to="/">◄ Home</Link>
         <section className="main-container">
-          <p>Loading profile...</p>
+          <p className="text-muted">Loading profile…</p>
         </section>
       </main>
     );
@@ -112,14 +110,12 @@ const ProfilePage = () => {
 
   return (
     <main>
-      <Link className="home-link" to="/">
-        ◄ Home
-      </Link>
+      <Link className="home-link" to="/">◄ Home</Link>
       <section className="main-container">
         <h1 className="header-text">Profile</h1>
 
-        <form onSubmit={handleSubmit} style={{ width: "100%", maxWidth: 300 }}>
-          <label style={{ display: "block", marginTop: 10 }}>
+        <form onSubmit={handleSubmit} className="section-block" style={{ maxWidth: 320 }}>
+          <label>
             Display name
             <input
               name="display_name"
@@ -128,7 +124,7 @@ const ProfilePage = () => {
               placeholder="Display name"
             />
           </label>
-          <label style={{ display: "block", marginTop: 10 }}>
+          <label>
             Phone
             <input
               name="phone"
@@ -137,11 +133,11 @@ const ProfilePage = () => {
               placeholder="Phone"
             />
           </label>
-          <label style={{ display: "block", marginTop: 10 }}>
+          <label>
             City
             <input name="city" value={form.city} onChange={handleChange} placeholder="City" />
           </label>
-          <label style={{ display: "block", marginTop: 10 }}>
+          <label>
             Long events count
             <input
               name="long_events_count"
@@ -151,7 +147,7 @@ const ProfilePage = () => {
               onChange={handleChange}
             />
           </label>
-          <label style={{ display: "block", marginTop: 10 }}>
+          <label>
             Short events count
             <input
               name="short_events_count"
@@ -161,19 +157,13 @@ const ProfilePage = () => {
               onChange={handleChange}
             />
           </label>
-          <button type="submit" disabled={isSaving} style={{ marginTop: 16 }}>
-            {isSaving ? "Saving..." : "Save"}
+          <button type="submit" disabled={isSaving}>
+            {isSaving ? "Saving…" : "Save"}
           </button>
         </form>
 
         {message && (
-          <p
-            style={{
-              marginTop: 12,
-              color: message.type === "error" ? "#ff6b6b" : "#3ecf8e",
-              fontSize: "0.9rem",
-            }}
-          >
+          <p className={message.type === "error" ? "status-error" : "status-success"}>
             {message.text}
           </p>
         )}

@@ -1,121 +1,450 @@
+/* Design system: minimal elegant, light mode, deep navy accent */
+:root {
+  --color-bg: #fafafa;
+  --color-bg-subtle: #f5f5f5;
+  --color-surface: #ffffff;
+  --color-border: #e5e7eb;
+  --color-border-focus: #1e3a5f;
+  --color-text: #1f2937;
+  --color-text-muted: #6b7280;
+  --color-text-soft: #9ca3af;
+  --color-accent: #1e3a5f;
+  --color-accent-hover: #2d4a6f;
+  --color-accent-muted: #3b5a82;
+  --color-accent-bg: rgba(30, 58, 95, 0.08);
+  --color-error: #b91c1c;
+  --color-success: #047857;
+  --radius-sm: 6px;
+  --radius-lg: 10px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --container-max: 520px;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Inter", sans-serif !important;
 }
+
 body {
-  background-color: #1c1c1c; /* Darker background, closer to Supabase style */
-  color: white;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  min-height: 100vh;
 }
+
 main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 10vh;
-}
-a {
-  text-decoration: none;
-}
-.header-text {
-  display: flex;
-  gap: 0.5em;
-  align-items: center;
-  padding: 0.5em 1em;
-  font-weight: bold;
-  background: none;
-  text-align: center;
-}
-.main-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: #2a2a2a; /* Slightly lighter than body, but still dark */
-  padding: 2em 2em;
-  width: 100%;
-  max-width: 500px;
-  border-radius: 4px; /* Slightly rounded corners */
-  box-shadow: 0 0 60px rgba(0, 0, 0, 0.2);
-  border-top: 5px;
-  border-width: 10px 0px 0px 0px;
-  border-style: solid;
-  border-color: #3ecf8e; /* Supabase green */
-}
-#github-repo-link {
-  display: flex;
-  gap: 0.5em;
+  padding: var(--space-6) var(--space-4);
   margin-top: 0;
-  align-items: center;
-  padding: 0.5em 1em;
-  font-weight: bold;
-  background: none;
-  cursor: pointer;
-  color: #3ecf8e; /* Supabase green */
+  min-height: 100vh;
 }
-#github-repo-link:hover {
-  background-color: rgba(
-    62,
-    207,
-    142,
-    0.1
-  ); /* Supabase green with low opacity */
-}
-input {
-  padding: 1rem;
-  border-radius: 4px;
-  outline: none;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  background-color: #3a3a3a; /* Slightly lighter than container background */
-  border: 1px solid #4a4a4a;
-  font-size: 1rem;
-  color: white;
-  margin-top: 7px;
-  width: 300px;
-}
-button,
-a {
-  font-size: 16px;
-  padding: 1em;
-  background: none;
-  cursor: pointer;
-  color: white;
-  background: #229f65; /* Supabase green */
-  border: none;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-  width: 300px;
-  text-align: center;
-  margin-top: 1em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  font-weight: bold;
-  border: 1px solid #33b379; /* Supabase green */
+
+@media (min-width: 640px) {
+  main {
+    padding-top: 3rem;
+    padding-bottom: var(--space-8);
+  }
 }
 
 a {
-  border: none;
+  text-decoration: none;
+  color: inherit;
 }
-button:hover,
-a:hover {
-  background: #2ebd80; /* Slightly darker Supabase green for hover */
+
+/* Container */
+.main-container {
+  width: 100%;
+  max-width: var(--container-max);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  padding: var(--space-6) var(--space-5);
 }
+
+@media (min-width: 640px) {
+  .main-container {
+    padding: var(--space-8) var(--space-6);
+  }
+}
+
+/* Typography */
+.header-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.02em;
+}
+
+@media (min-width: 640px) {
+  .header-text {
+    font-size: 1.75rem;
+  }
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+/* Links */
 .home-link {
-  margin-bottom: 1em;
+  align-self: flex-start;
+  margin-bottom: var(--space-4);
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  padding: var(--space-2) 0;
+  border-radius: var(--radius-sm);
+  transition: color 0.2s;
 }
+
+.home-link:hover {
+  color: var(--color-accent);
+}
+
 .auth-link {
   background: transparent;
-  color: #3ecf8e; /* Supabase green */
+  color: var(--color-accent);
+  font-weight: 500;
+  border: none;
+  box-shadow: none;
+  padding: var(--space-2) 0;
+  min-height: auto;
+  width: auto;
+  justify-content: flex-start;
 }
+
 .auth-link:hover {
   background: transparent;
+  color: var(--color-accent-hover);
   text-decoration: underline;
 }
+
+/* Buttons — rounded-lg, subtle shadow */
+button,
+.btn {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  box-shadow: var(--shadow-sm);
+}
+
+button:disabled,
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Primary (default for button/link as CTA) */
+button,
+main a[href]:not(.home-link):not(.auth-link):not(#github-repo-link) {
+  background: var(--color-accent);
+  color: white;
+  width: 100%;
+  max-width: 300px;
+  margin-top: var(--space-4);
+}
+
+button:hover:not(:disabled),
+main a[href]:not(.home-link):not(.auth-link):not(#github-repo-link):hover {
+  background: var(--color-accent-hover);
+  box-shadow: 0 2px 4px rgba(30, 58, 95, 0.2);
+}
+
+/* Secondary / ghost */
+.btn-ghost {
+  background: transparent;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.btn-ghost:hover {
+  background: var(--color-accent-bg);
+}
+
+.btn-danger {
+  background: #b91c1c;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #991b1b;
+}
+
+/* Button group / dashboard actions */
+.dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.dashboard-actions a,
+.dashboard-actions button {
+  margin-top: 0;
+  flex: 1 1 auto;
+  min-width: 140px;
+  max-width: none;
+}
+
+@media (min-width: 480px) {
+  .dashboard-actions {
+    flex-wrap: nowrap;
+  }
+  .dashboard-actions a,
+  .dashboard-actions button {
+    flex: 0 1 auto;
+  }
+}
+
+/* Form inputs */
+input,
+select,
+textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-top: var(--space-2);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px var(--color-accent-bg);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-soft);
+}
+
+label {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+/* Divider */
 #divider {
-  width: 70%;
-  height: 2px;
-  background-color: #3ecf8e; /* Supabase green */
-  margin: 1em 0;
-  border-radius: 100%;
+  width: 100%;
+  max-width: 80%;
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-6) 0;
+}
+
+/* Cards */
+.card {
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-top: var(--space-3);
+}
+
+/* GitHub link */
+#github-repo-link {
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin-top: var(--space-4);
+  padding: var(--space-2) 0;
+  font-weight: 500;
+  color: var(--color-accent);
+  background: transparent;
+  width: auto;
+  min-height: auto;
+  box-shadow: none;
+}
+
+#github-repo-link:hover {
+  background: var(--color-accent-bg);
+  color: var(--color-accent-hover);
+}
+
+#github-repo-link svg path {
+  fill: var(--color-accent);
+}
+
+/* Status messages */
+.status-error {
+  color: var(--color-error);
+  font-size: 0.9rem;
+  margin-top: var(--space-3);
+}
+
+.status-success {
+  color: var(--color-success);
+  font-size: 0.9rem;
+  margin-top: var(--space-3);
+}
+
+/* Page nav (e.g. Home + Profile on dashboards) */
+.page-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  width: 100%;
+  max-width: var(--container-max);
+}
+
+.page-nav .home-link {
+  margin-bottom: 0;
+}
+
+/* Section block (dashboard content blocks) */
+.section-block {
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
+.section-block:first-of-type {
+  margin-top: 0;
+}
+
+/* List card item (letters, etc.) */
+.list-card {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--color-surface);
+}
+
+.list-card-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.list-card-actions button {
+  margin-top: 0;
+  width: auto;
+  min-width: 80px;
+}
+
+/* Table (members, etc.) */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table th {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Chat UI (Member dashboard) */
+.chat-messages {
+  max-height: 280px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin: var(--space-3) 0;
+  background: var(--color-bg-subtle);
+}
+
+.chat-bubble {
+  margin-bottom: var(--space-3);
+  max-width: 85%;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-lg);
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 0.9375rem;
+}
+
+.chat-bubble-user {
+  margin-left: auto;
+  text-align: right;
+  background: var(--color-accent-bg);
+  color: var(--color-accent);
+}
+
+.chat-bubble-assistant {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.chat-meta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+.chat-input-row {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.chat-input-row input {
+  flex: 1;
+  margin-top: 0;
+}
+
+.chat-input-row button {
+  margin-top: 0;
+  width: auto;
+  min-width: 88px;
 }

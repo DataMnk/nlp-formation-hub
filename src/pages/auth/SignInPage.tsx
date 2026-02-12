@@ -4,14 +4,9 @@ import { useSession } from "../../context/SessionContext";
 import supabase from "../../supabase";
 
 const SignInPage = () => {
-  // ==============================
-  // If user is already logged in, redirect to home
-  // This logic is being repeated in SignIn and SignUp..
   const { session } = useSession();
   if (session) return <Navigate to="/" />;
-  // maybe we can create a wrapper component for these pages
-  // just like the ./router/AuthProtectedRoute.tsx? up to you.
-  // ==============================
+
   const [status, setStatus] = useState("");
   const [formValues, setFormValues] = useState({
     email: "",
@@ -34,6 +29,7 @@ const SignInPage = () => {
     }
     setStatus("");
   };
+
   return (
     <main>
       <Link className="home-link" to="/">
@@ -41,23 +37,35 @@ const SignInPage = () => {
       </Link>
       <form className="main-container" onSubmit={handleSubmit}>
         <h1 className="header-text">Sign In</h1>
-        <input
-          name="email"
-          onChange={handleInputChange}
-          type="email"
-          placeholder="Email"
-        />
-        <input
-          name="password"
-          onChange={handleInputChange}
-          type="password"
-          placeholder="Password"
-        />
-        <button type="submit">Login</button>
-        <Link className="auth-link" to="/auth/sign-up">
-          Don't have an account? Sign Up
+
+        <div className="section-block">
+          <label>
+            Email
+            <input
+              name="email"
+              onChange={handleInputChange}
+              type="email"
+              placeholder="you@example.com"
+              value={formValues.email}
+            />
+          </label>
+          <label>
+            Password
+            <input
+              name="password"
+              onChange={handleInputChange}
+              type="password"
+              placeholder="••••••••"
+              value={formValues.password}
+            />
+          </label>
+        </div>
+
+        <button type="submit">Sign in</button>
+        <Link className="auth-link" to="/auth/sign-up" style={{ display: "block", marginTop: "1rem" }}>
+          Don&apos;t have an account? Sign up
         </Link>
-        {status && <p>{status}</p>}
+        {status && <p className="text-muted" style={{ marginTop: "1rem" }}>{status}</p>}
       </form>
     </main>
   );
