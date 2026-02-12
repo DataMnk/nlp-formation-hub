@@ -1,65 +1,207 @@
-# 🔐 Protected Notes App (Supabase + React)
+# Formation Hub  
+### Full-Stack NLP Application with RAG, Supabase & Edge Functions
 
-A simple full-stack demo app built with **React, Supabase, and TypeScript** that demonstrates:
+Formation Hub is a production-ready full-stack NLP application that combines secure authentication, role-based access control, vector search with pgvector, Supabase Edge Functions, and a Retrieval-Augmented Generation (RAG) chatbot.
 
-- User authentication (sign up / sign in)
-- Protected routes
-- A real database with Row Level Security (RLS)
-- User-specific data access
-
-This project was built as a hands-on exercise to practice authentication, security, and database integration.
+The application is deployed live and designed to demonstrate modern AI-native architecture patterns using a clean, scalable stack.
 
 ---
 
-## ✨ Features
+## Live Application
 
-- Email/password authentication with Supabase
-- Protected page accessible only to logged-in users
-- Users can create and delete their own notes
-- Notes are securely stored in a Supabase Postgres database
-- Row Level Security ensures users can only access their own data
+https://whimsical-salamander-0c7593.netlify.app/
 
 ---
 
-## 🧠 Tech Stack
+## Demo
 
-- React + TypeScript
-- Supabase (Auth + Database)
-- Vite
+<!-- Replace demo.gif with your final recording -->
+
+![App Demo](demo.gif)
+
+---
+
+## Overview
+
+Formation Hub is built around a secure, role-aware system where users authenticate via Supabase, manage editable profiles, and interact with a vector-powered RAG chatbot.
+
+The architecture separates concerns cleanly:
+
+- Frontend handles UI, routing, and client state.
+- Supabase manages authentication, database, RLS, and Edge Functions.
+- pgvector enables semantic search over embedded documents.
+- Edge Functions securely handle embedding generation and RAG orchestration.
+- The chatbot retrieves relevant context before generating answers.
+
+This ensures responses are contextual, grounded, and not generic LLM outputs.
+
+---
+
+## Core Capabilities
+
+### Secure Authentication & Role-Based Access
+
+- Email/password authentication using Supabase Auth
+- Persistent session management
+- Role-based routing (`admin` and `member`)
+- Conditional dashboards based on role
+- Row Level Security enforcing data isolation
+
+---
+
+### Editable User Profiles
+
+Each authenticated user can:
+
+- View and update profile information
+- Persist changes to the database
+- Refresh and retain updates
+- Access only their own data under RLS policies
+
+---
+
+### Database Architecture (Supabase + PostgreSQL)
+
+Key tables include:
+
+- `profiles`
+- `documents`
+- `letter_chunks` (vectorized embeddings)
+- `chat_history`
+
+Features:
+
+- Foreign key relationships
+- Row Level Security policies
+- pgvector extension enabled
+- Secure data ownership rules
+
+---
+
+### Vector Search & RAG Pipeline
+
+The RAG system follows this flow:
+
+1. Documents are ingested and chunked.
+2. Embeddings are generated via Edge Function.
+3. Vectors are stored using pgvector.
+4. User query triggers similarity search (top-k retrieval).
+5. Relevant chunks are injected into LLM prompt.
+6. LLM generates contextual response.
+7. Chat history is displayed (and optionally stored).
+
+This ensures answers are grounded in the knowledge base.
+
+---
+
+### Supabase Edge Functions
+
+Deployed Edge Functions:
+
+- `ingest-letters`  
+  Handles document chunking and embedding generation.
+
+- `rag-chat`  
+  Performs similarity search and context-aware response generation.
+
+Secrets are stored securely using Supabase environment variables and are never exposed to the frontend.
+
+---
+
+### Modern UI Layer
+
+The interface integrates advanced UI components from:
+
+- 21st.dev
+- ReactBits
+
+Components are fully integrated into workflows and provide:
+
+- Interactive dashboards
+- Styled authentication flows
+- Enhanced chat UI
+- Modern navigation patterns
+- Animated or elevated visual components
+
+The design prioritizes clarity, structure, and production polish.
+
+---
+
+## Tech Stack
+
+**Frontend**
+- React (Vite + TypeScript)
 - React Router
+- Tailwind CSS
+- 21st.dev / ReactBits components
+
+**Backend**
+- Supabase (Auth + PostgreSQL + Edge Functions)
+
+**AI & Search**
+- pgvector
+- Embeddings via Edge Function
+- Contextual LLM responses
+
+**Deployment**
+- Netlify (CI/CD via GitHub)
 
 ---
 
-## 🎥 Demo
+## Environment Variables
 
-<!-- GIF goes here -->
-![Demo GIF](demo.gif)
-![SupaBaseAuthNotes](https://github.com/user-attachments/assets/69ae4340-668f-4465-8bc9-c7faebd340f8)
+The following variables are required for local development and deployment:
 
----
+```
+VITE_SUPABASE_URL
+VITE_SUPABASE_ANON_KEY
+```
 
-## 🚀 How to Run Locally
-
-1. Clone the repo
-2. Install dependencies  
-   ```bash
-   npm install
+Edge Function secrets are stored in Supabase project settings.
 
 ---
 
-## 🙏 Acknowledgments
+## Local Development
 
-This project was originally based on the following starter template:
+Clone the repository:
 
-https://github.com/fenago/react-supabase-auth-template
+```bash
+git clone https://github.com/DataMnk/nlp-formation-hub.git
+cd nlp-formation-hub
+```
 
-It was extended and customized as part of a hands-on class exercise focused on
-authentication, protected routes, and database security using Supabase.
+Install dependencies:
 
+```bash
+npm install
+```
+
+Run development server:
+
+```bash
+npm run dev
+```
 
 ---
 
-## 📄 License
+## Deployment
 
-This project follows the license of the original starter repository.
+The application is deployed via Netlify with continuous deployment enabled from the `main` branch.
 
+Any push to `main` triggers an automatic production build.
+
+---
+
+## Architectural Notes
+
+- Authentication state persists across refresh.
+- RLS ensures users cannot access other users’ records.
+- Vector similarity search uses cosine distance.
+- Embeddings are generated server-side via Edge Functions.
+- The application is structured for extensibility and modular growth.
+
+---
+
+## License
+
+This project is for academic and research demonstration purposes.
