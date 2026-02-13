@@ -8,22 +8,70 @@ const HomePage = () => {
     <main>
       <div className="home-layout">
         <section className="main-container">
-          <h1 className="header-text">React Supabase Auth Template</h1>
+          <h1 className="header-text">Formation Hub</h1>
           <p className="text-muted home-subtitle">
-            Current user: {session?.user.email || "None"}
+            Current user: {session?.user.email || "None, please sign in or create an account."}
           </p>
 
-          <div className="dashboard-actions">
-            {session ? (
-              <button type="button" onClick={() => supabase.auth.signOut()}>
-                Sign Out
+          {session && (
+            <div className="home-signout-wrap">
+              <button
+                type="button"
+                className="home-signout-btn"
+                onClick={() => supabase.auth.signOut()}
+                aria-label="Sign out"
+              >
+                Sign out
               </button>
-            ) : (
-              <Link to="/auth/sign-in">Sign In</Link>
+            </div>
+          )}
+
+          <div className="home-actions-grid" role="navigation" aria-label="Quick actions">
+            {!session && (
+              <Link to="/auth/sign-in" className="home-action-card" tabIndex={0}>
+                <span className="home-action-icon" aria-hidden>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                    <polyline points="10 17 15 12 10 7" />
+                    <line x1="15" y1="12" x2="3" y2="12" />
+                  </svg>
+                </span>
+                <span className="home-action-title">Sign In</span>
+                <span className="home-action-subtitle">Sign in to your account</span>
+              </Link>
             )}
-            <Link to="/admin">Admin Dashboard</Link>
-            <Link to="/member">Member Dashboard</Link>
-            <Link to="/profile">Profile</Link>
+            <Link to="/admin" className="home-action-card" tabIndex={0}>
+              <span className="home-action-icon" aria-hidden>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </span>
+              <span className="home-action-title">Admin Dashboard</span>
+              <span className="home-action-subtitle">Manage members and letters</span>
+            </Link>
+            <Link to="/member" className="home-action-card" tabIndex={0}>
+              <span className="home-action-icon" aria-hidden>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </span>
+              <span className="home-action-title">Member Dashboard</span>
+              <span className="home-action-subtitle">View letters and progress</span>
+            </Link>
+            <Link to="/profile" className="home-action-card" tabIndex={0}>
+              <span className="home-action-icon" aria-hidden>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="8" r="3" />
+                </svg>
+              </span>
+              <span className="home-action-title">Profile</span>
+              <span className="home-action-subtitle">Edit your profile</span>
+            </Link>
           </div>
 
           <div id="divider" />

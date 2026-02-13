@@ -38,7 +38,7 @@ const SignUpPage = () => {
       <form className="main-container" onSubmit={handleSubmit}>
         <h1 className="header-text">Sign Up</h1>
         <p className="text-muted" style={{ textAlign: "center", marginBottom: "1.5rem", fontSize: "0.875rem" }}>
-          Demo app — please don&apos;t use your real email or password.
+          Don't have an account? Sign up for a new account.
         </p>
 
         <div className="section-block">

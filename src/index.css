@@ -472,15 +472,127 @@ label {
   margin-bottom: 1.5rem;
 }
 
-.home-layout .dashboard-actions {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+/* Home: Sign out ghost button above grid */
+.home-signout-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+  margin-bottom: -0.5rem;
 }
 
-.home-layout .dashboard-actions a,
-.home-layout .dashboard-actions button {
-  flex: none;
-  min-width: 0;
+.home-signout-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  width: auto;
+  min-height: auto;
+  margin-top: 0;
+  max-width: none;
+  box-shadow: none;
+}
+
+.home-signout-btn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: var(--color-accent-bg);
+}
+
+/* Home: 2x2 card-style action grid */
+.home-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 480px) {
+  .home-actions-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+.home-action-card {
+  display: block;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #2c4a73 0%, #1e3a5f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  text-align: left;
+  text-decoration: none;
+  color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-action-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+}
+
+.home-action-card:hover {
+  transform: translateY(-3px);
+  background: linear-gradient(135deg, #355a85 0%, #2c4a73 100%);
+  box-shadow:
+    0 12px 28px rgba(30, 58, 95, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.home-action-card:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 3px var(--color-bg),
+    0 0 0 5px rgba(255, 255, 255, 0.4);
+}
+
+.home-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.95);
+  position: relative;
+}
+
+.home-action-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.home-action-title {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.25rem;
+  position: relative;
+  letter-spacing: -0.01em;
+}
+
+.home-action-subtitle {
+  display: block;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+  position: relative;
 }
