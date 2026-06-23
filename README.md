@@ -1,184 +1,108 @@
-# Formation Hub  
-### Full-Stack NLP Application with RAG, Supabase & Edge Functions
+# Formation Hub
+### Plataforma de formación con autenticación, roles y chatbot RAG
 
-Formation Hub is a production-ready full-stack NLP application that combines secure authentication, role-based access control, vector search with pgvector, Supabase Edge Functions, and a Retrieval-Augmented Generation (RAG) chatbot.
-
-The application is deployed live and designed to demonstrate modern AI-native architecture patterns using a clean, scalable stack.
+Formation Hub es una aplicación full-stack para gestionar consagraciones de formación espiritual: programas secuenciales de formación mensual (cartas), con acceso diferenciado por rol y un chatbot de preguntas y respuestas basado en el contenido de las cartas (RAG).
 
 ---
 
-## Live Application
+## Aplicación en vivo
 
 https://whimsical-salamander-0c7593.netlify.app/
 
 ---
 
-## Demo
+## Resumen
 
-<!-- Replace demo.gif with your final recording -->
+La aplicación está construida alrededor de un sistema de roles seguro: los usuarios se autentican vía Supabase, gestionan su perfil, y los administradores gestionan programas y cartas de formación. Los miembros consultan las cartas publicadas de su programa y pueden interactuar con un chatbot que responde basándose únicamente en el contenido de esas cartas.
 
-![App Demo](demo.gif)
-
----
-
-## Overview
-
-Formation Hub is built around a secure, role-aware system where users authenticate via Supabase, manage editable profiles, and interact with a vector-powered RAG chatbot.
-
-The architecture separates concerns cleanly:
-
-- Frontend handles UI, routing, and client state.
-- Supabase manages authentication, database, RLS, and Edge Functions.
-- pgvector enables semantic search over embedded documents.
-- Edge Functions securely handle embedding generation and RAG orchestration.
-- The chatbot retrieves relevant context before generating answers.
-
-This ensures responses are contextual, grounded, and not generic LLM outputs.
+- El frontend maneja la UI, el ruteo y el estado del cliente.
+- Supabase gestiona autenticación, base de datos, RLS y Edge Functions.
+- pgvector habilita búsqueda semántica sobre el contenido de las cartas.
+- Las Edge Functions manejan de forma segura la generación de embeddings y la orquestación del RAG.
 
 ---
 
-## Core Capabilities
+## Funcionalidades principales
 
-### Secure Authentication & Role-Based Access
+### Autenticación y control de acceso por rol
+- Autenticación por email/contraseña vía Supabase Auth
+- Sesión persistente
+- Rutas diferenciadas por rol (`admin` y `member`)
+- Row Level Security para aislar datos por usuario y programa
 
-- Email/password authentication using Supabase Auth
-- Persistent session management
-- Role-based routing (`admin` and `member`)
-- Conditional dashboards based on role
-- Row Level Security enforcing data isolation
+### Perfiles de usuario editables
+- Ver y actualizar información de perfil
+- Acceso únicamente a los propios datos bajo políticas RLS
 
----
+### Arquitectura de base de datos (Supabase + PostgreSQL)
 
-### Editable User Profiles
+Tablas principales:
+- `programs` — consagraciones (programas de formación secuenciales)
+- `profiles` — perfil de usuario, rol, programa asignado
+- `letters` — cartas de formación mensuales, con preguntas de comprensión
+- `letter_chunks` — fragmentos vectorizados de las cartas (pgvector)
 
-Each authenticated user can:
+Características:
+- Relaciones por foreign key
+- Políticas de Row Level Security en todas las tablas
+- Extensión pgvector habilitada
+- Reglas de propiedad de datos seguras
 
-- View and update profile information
-- Persist changes to the database
-- Refresh and retain updates
-- Access only their own data under RLS policies
+### Búsqueda vectorial y pipeline RAG
 
----
-
-### Database Architecture (Supabase + PostgreSQL)
-
-Key tables include:
-
-- `profiles`
-- `documents`
-- `letter_chunks` (vectorized embeddings)
-- `chat_history`
-
-Features:
-
-- Foreign key relationships
-- Row Level Security policies
-- pgvector extension enabled
-- Secure data ownership rules
-
----
-
-### Vector Search & RAG Pipeline
-
-The RAG system follows this flow:
-
-1. Documents are ingested and chunked.
-2. Embeddings are generated via Edge Function.
-3. Vectors are stored using pgvector.
-4. User query triggers similarity search (top-k retrieval).
-5. Relevant chunks are injected into LLM prompt.
-6. LLM generates contextual response.
-7. Chat history is displayed (and optionally stored).
-
-This ensures answers are grounded in the knowledge base.
-
----
+1. El contenido de las cartas se fragmenta (chunking).
+2. Se generan embeddings vía Edge Function.
+3. Los vectores se almacenan con pgvector.
+4. La pregunta del usuario activa una búsqueda por similitud (top-k).
+5. Los fragmentos relevantes se inyectan en el prompt del LLM.
+6. El LLM genera una respuesta contextual, citando las cartas como fuente.
 
 ### Supabase Edge Functions
 
-Deployed Edge Functions:
+- `ingest-letters` — fragmenta el contenido y genera embeddings.
+- `rag-chat` — realiza la búsqueda por similitud y genera la respuesta contextual.
 
-- `ingest-letters`  
-  Handles document chunking and embedding generation.
-
-- `rag-chat`  
-  Performs similarity search and context-aware response generation.
-
-Secrets are stored securely using Supabase environment variables and are never exposed to the frontend.
+Los secretos se almacenan de forma segura en las variables de entorno de Supabase y nunca se exponen al frontend.
 
 ---
 
-### Modern UI Layer
-
-The interface integrates advanced UI components from:
-
-- 21st.dev
-- ReactBits
-
-Components are fully integrated into workflows and provide:
-
-- Interactive dashboards
-- Styled authentication flows
-- Enhanced chat UI
-- Modern navigation patterns
-- Animated or elevated visual components
-
-The design prioritizes clarity, structure, and production polish.
-
----
-
-## Tech Stack
+## Stack técnico
 
 **Frontend**
-- React (Vite + TypeScript)
+- React 19 (Vite + TypeScript)
 - React Router
-- Tailwind CSS
-- 21st.dev / ReactBits components
+- CSS custom (variables CSS, sin librería de UI externa)
 
 **Backend**
 - Supabase (Auth + PostgreSQL + Edge Functions)
 
-**AI & Search**
+**IA y búsqueda**
 - pgvector
-- Embeddings via Edge Function
-- Contextual LLM responses
+- Embeddings vía Edge Function (OpenAI)
+- Respuestas contextuales con GPT-4o-mini
 
 **Deployment**
-- Netlify (CI/CD via GitHub)
+- Netlify (CI/CD vía GitHub)
 
 ---
 
-## Environment Variables
-
-The following variables are required for local development and deployment:
+## Variables de entorno
 
 ```
 VITE_SUPABASE_URL
 VITE_SUPABASE_ANON_KEY
 ```
 
-Edge Function secrets are stored in Supabase project settings.
+Los secretos de las Edge Functions se configuran en Supabase, no aquí.
 
 ---
 
-## Local Development
-
-Clone the repository:
+## Desarrollo local
 
 ```bash
 git clone https://github.com/DataMnk/nlp-formation-hub.git
 cd nlp-formation-hub
-```
-
-Install dependencies:
-
-```bash
 npm install
-```
-
-Run development server:
-
-```bash
 npm run dev
 ```
 
@@ -186,22 +110,19 @@ npm run dev
 
 ## Deployment
 
-The application is deployed via Netlify with continuous deployment enabled from the `main` branch.
-
-Any push to `main` triggers an automatic production build.
+La aplicación se despliega vía Netlify con CI/CD habilitado desde la rama `main`. Cada push a `main` dispara un build de producción automático.
 
 ---
 
-## Architectural Notes
+## Notas de arquitectura
 
-- Authentication state persists across refresh.
-- RLS ensures users cannot access other users’ records.
-- Vector similarity search uses cosine distance.
-- Embeddings are generated server-side via Edge Functions.
-- The application is structured for extensibility and modular growth.
+- El estado de autenticación persiste tras refrescar la página.
+- RLS asegura que los usuarios no puedan acceder a registros de otros usuarios o programas.
+- La búsqueda por similitud vectorial usa distancia coseno.
+- Los embeddings se generan del lado del servidor vía Edge Functions.
 
 ---
 
-## License
+## Licencia
 
-This project is for academic and research demonstration purposes.
+MIT License — ver `LICENSE.MD`.
