@@ -5,13 +5,14 @@ import supabase from "../../supabase";
 
 const SignUpPage = () => {
   const { session } = useSession();
-  if (session) return <Navigate to="/" />;
-
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
   });
+
+  if (session) return <Navigate to="/" />;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
@@ -19,15 +20,18 @@ const SignUpPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
     setStatus("Creating account...");
-    const { error } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email: formValues.email,
       password: formValues.password,
     });
-    if (error) {
-      alert(error.message);
+    if (signUpError) {
+      setError(signUpError.message);
+      setStatus("");
+      return;
     }
-    setStatus("");
+    setStatus("¡Listo! Revisa tu correo para confirmar tu cuenta antes de iniciar sesión.");
   };
 
   return (
@@ -40,7 +44,6 @@ const SignUpPage = () => {
         <p className="text-muted" style={{ textAlign: "center", marginBottom: "1.5rem", fontSize: "0.875rem" }}>
           Don't have an account? Sign up for a new account.
         </p>
-
         <div className="section-block">
           <label>
             Email
@@ -63,12 +66,18 @@ const SignUpPage = () => {
             />
           </label>
         </div>
-
-        <button type="submit">Create account</button>
+        <button type="submit" disabled={status === "Creating account..."}>
+          {status === "Creating account..." ? "Creating account..." : "Create account"}
+        </button>
         <Link className="auth-link" to="/auth/sign-in" style={{ display: "block", marginTop: "1rem" }}>
           Already have an account? Sign in
         </Link>
-        {status && <p className="text-muted" style={{ marginTop: "1rem" }}>{status}</p>}
+        {status && status !== "Creating account..." && (
+          <p style={{ marginTop: "1rem", color: "green", textAlign: "center" }}>{status}</p>
+        )}
+        {error && (
+          <p style={{ marginTop: "1rem", color: "crimson", textAlign: "center" }}>{error}</p>
+        )}
       </form>
     </main>
   );

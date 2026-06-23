@@ -5,13 +5,14 @@ import supabase from "../../supabase";
 
 const SignInPage = () => {
   const { session } = useSession();
-  if (session) return <Navigate to="/" />;
-
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
   });
+
+  if (session) return <Navigate to="/" />;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
@@ -19,13 +20,16 @@ const SignInPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError("");
     setStatus("Logging in...");
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error: signInError } = await supabase.auth.signInWithPassword({
       email: formValues.email,
       password: formValues.password,
     });
-    if (error) {
-      alert(error.message);
+    if (signInError) {
+      setError(signInError.message);
+      setStatus("");
+      return;
     }
     setStatus("");
   };
@@ -37,7 +41,6 @@ const SignInPage = () => {
       </Link>
       <form className="main-container" onSubmit={handleSubmit}>
         <h1 className="header-text">Sign In</h1>
-
         <div className="section-block">
           <label>
             Email
@@ -60,12 +63,15 @@ const SignInPage = () => {
             />
           </label>
         </div>
-
-        <button type="submit">Sign in</button>
+        <button type="submit" disabled={status === "Logging in..."}>
+          {status === "Logging in..." ? "Logging in..." : "Sign in"}
+        </button>
         <Link className="auth-link" to="/auth/sign-up" style={{ display: "block", marginTop: "1rem" }}>
           Don&apos;t have an account? Sign up
         </Link>
-        {status && <p className="text-muted" style={{ marginTop: "1rem" }}>{status}</p>}
+        {error && (
+          <p style={{ marginTop: "1rem", color: "crimson", textAlign: "center" }}>{error}</p>
+        )}
       </form>
     </main>
   );
