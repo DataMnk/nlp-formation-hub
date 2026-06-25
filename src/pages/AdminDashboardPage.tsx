@@ -21,11 +21,13 @@ type Letter = {
 
 type MemberRow = {
   id: string;
-  email?: string | null;
   display_name: string | null;
   city: string | null;
+  phone: string | null;
   long_events_count: number | null;
   short_events_count: number | null;
+  program_id: string | null;
+  role: string | null;
 };
 
 const AdminDashboardPage = () => {
@@ -37,6 +39,7 @@ const AdminDashboardPage = () => {
   const [programsLoading, setProgramsLoading] = useState(true);
   const [lettersLoading, setLettersLoading] = useState(true);
   const [membersLoading, setMembersLoading] = useState(true);
+  const [membersError, setMembersError] = useState<string | null>(null);
   const [status, setStatus] = useState("");
 
   const [editingLetter, setEditingLetter] = useState<Letter | null>(null);
@@ -66,11 +69,17 @@ const AdminDashboardPage = () => {
   };
 
   const fetchMembers = async () => {
+    setMembersError(null);
     const { data, error } = await supabase
       .from("profiles")
-      .select("id, email, display_name, city, long_events_count, short_events_count")
+      .select("id, display_name, city, phone, long_events_count, short_events_count, program_id, role")
       .order("display_name", { ascending: true });
-    if (!error) setMembers((data as MemberRow[]) ?? []);
+    if (error) {
+      setMembersError("No se pudieron cargar los miembros. Intenta de nuevo.");
+      setMembers([]);
+    } else {
+      setMembers((data as MemberRow[]) ?? []);
+    }
     setMembersLoading(false);
   };
 
@@ -259,6 +268,8 @@ const AdminDashboardPage = () => {
           <h2 className="section-title">Members</h2>
           {membersLoading ? (
             <p className="text-muted">Loading…</p>
+          ) : membersError ? (
+            <p className="status-error">{membersError}</p>
           ) : members.length === 0 ? (
             <p className="text-muted">No members yet.</p>
           ) : (
@@ -266,8 +277,11 @@ const AdminDashboardPage = () => {
               <table className="data-table">
                 <thead>
                   <tr>
-                    <th>Email</th>
+                    <th>Name</th>
                     <th>City</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Program</th>
                     <th>Long</th>
                     <th>Short</th>
                   </tr>
@@ -275,8 +289,11 @@ const AdminDashboardPage = () => {
                 <tbody>
                   {members.map((m) => (
                     <tr key={m.id}>
-                      <td>{m.email ?? m.display_name ?? "—"}</td>
+                      <td>{m.display_name ?? "—"}</td>
                       <td>{m.city ?? "—"}</td>
+                      <td>{m.phone ?? "—"}</td>
+                      <td>{m.role ?? "—"}</td>
+                      <td>{programs.find((p) => p.id === m.program_id)?.name ?? "—"}</td>
                       <td>{m.long_events_count ?? "—"}</td>
                       <td>{m.short_events_count ?? "—"}</td>
                     </tr>
