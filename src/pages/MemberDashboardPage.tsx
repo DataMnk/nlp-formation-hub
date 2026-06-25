@@ -95,27 +95,38 @@ const MemberDashboardPage = () => {
     setChatInput("");
     setChatSending(true);
 
-    const res = await sendRagChatMessage(q, chatProgramId, session.access_token);
-    setChatSending(false);
+    try {
+      const res = await sendRagChatMessage(q, chatProgramId, session.access_token);
 
-    if (res.success && res.message !== undefined) {
+      if (res.success && res.message !== undefined) {
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: res.message ?? "",
+            letter_titles: res.letter_titles,
+          },
+        ]);
+      } else {
+        setChatError(res.message ?? res.error ?? "Error sending message");
+        setChatMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: res.message ?? res.error ?? "Sorry, something went wrong.",
+          },
+        ]);
+      }
+    } catch {
       setChatMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: res.message ?? "",
-          letter_titles: res.letter_titles,
+          content: "Hubo un error al procesar tu pregunta, intenta de nuevo",
         },
       ]);
-    } else {
-      setChatError(res.message ?? res.error ?? "Error sending message");
-      setChatMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: res.message ?? res.error ?? "Sorry, something went wrong.",
-        },
-      ]);
+    } finally {
+      setChatSending(false);
     }
   };
 
