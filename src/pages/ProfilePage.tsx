@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSession } from "../context/SessionContext";
+import { useSession } from "../context/useSession";
 import supabase from "../supabase";
 
 type ProfileForm = {

@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useRole } from "../context/RoleContext";
+import { useRole } from "../context/useRole";
 
 const AdminRoute = () => {
   const { role } = useRole();
